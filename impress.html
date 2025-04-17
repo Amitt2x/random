@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;500&family=Great+Vibes&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FF61D2, #FE9090, #FFB8D1);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            transition: all 0.8s ease;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 25px;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:active {
+            transform: scale(0.98);
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3em;
+            background: linear-gradient(45deg, #FF0080, #FF8C00, #FF69B4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.3);
+            margin-bottom: 15px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: 400;
+            opacity: 0.9;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            font-family: 'Quicksand', sans-serif;
+            padding: 12px 25px;
+            font-size: 1em;
+            background: linear-gradient(45deg, #FF0080, #FF8C00);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 0, 128, 0.4);
+            margin: 10px 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #FF69B4, #FF1493);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn:active::after {
+            opacity: 1;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .memory-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 15px;
+            padding: 10px 0;
+            width: 100%;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .memory-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .memory-card {
+            flex: 0 0 auto;
+            width: 150px;
+            height: 200px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            scroll-snap-align: center;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .memory-card:active {
+            transform: scale(1);
+        }
+
+        .memory-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .memory-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            color: #FF0080;
+            font-size: 0.9em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            pointer-events: none;
+            animation: floatHeart linear forwards;
+            opacity: 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            width: 85%;
+            max-width: 350px;
+            max-height: 80vh;
+            overflow-y: auto;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.2em;
+            line-height: 1.5;
+            text-align: center;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #FF0080;
+        }
+
+        .love-message {
+            margin-bottom: 15px;
+        }
+
+        .signature {
+            font-style: italic;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 100;
+            border: none;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) translateX(-50px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-20vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+            to { text-shadow: 0 0 10px rgba(255, 255, 255, 0.8); }
+        }
+
+        .swipe-instruction {
+            color: white;
+            font-size: 0.9em;
+            opacity: 0.8;
+            animation: fadeInOut 2s infinite;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        #photo-container {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .photo-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .photo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); }
+            to { transform: scale(1.05); box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="glass-card">
+            <h1>Our Love Story</h1>
+            <p class="subtitle">Every moment with you is magical ✨</p>
+            
+            <div id="photo-container">
+                <div class="photo-circle">
+                    <img src="/api/placeholder/150/150" alt="Us">
+                </div>
+            </div>
+            
+            <button class="btn" onclick="showMessage()">💌 Love Letter</button>
+            <button class="btn theme-btn">🎨 Change Theme</button>
+            <button class="btn" onclick="showMemories()">💖 Our Memories</button>
+        </div>
+        
+        <div class="glass-card" id="memories-card" style="display: none;">
+            <h1>Our Memories</h1>
+            <div class="memory-container" id="memory-container">
+                <!-- Memory cards will be added here by JavaScript -->
+            </div>
+            <p class="swipe-instruction">← Swipe to see more →</p>
+            <button class="btn" onclick="hideMemories()">Back to Main</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="messageModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="hideMessage()">×</button>
+            <h2 style="color: #FF0080; margin-bottom: 20px;">My Dearest Love</h2>
+            <div class="love-message">
+                In the gentle whispers of dawn and the quiet moments of dusk, my heart beats only for you. You've become my morning sunshine and my evening stars, painting every moment with the colors of love.
+            </div>
+            <div class="love-message">
+                Through your eyes, I see a world more beautiful than I ever imagined. Your smile lights up my darkest days, and your love gives me wings to soar higher than I ever thought possible.
+            </div>
+            <div class="love-message">
+                Every moment with you feels like a dream I never want to wake up from. You're my safe harbor in storms, my adventure in calm seas, my home in this vast world.
+            </div>
+            <div class="signature">
+                Forever Yours,<br>
+                With All My Love ❤️
+            </div>
+        </div>
+    </div>
+    
+    <button class="music-btn" id="musicBtn">🎵</button>
+    <audio id="background-music" loop>
+        <source src="love-song.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        const heartEmojis = ['💗', '💖', '💝', '💕', '♥️', '💘', '💓', '💞'];
+        const gradients = [
+            'linear-gradient(135deg, #FF61D2, #FE9090, #FFB8D1)',
+            'linear-gradient(135deg, #FF1493, #FF69B4, #FFB6C1)',
+            'linear-gradient(135deg, #FF0080, #FF8C00, #FFA500)',
+            'linear-gradient(135deg, #FF69B4, #DA70D6, #FFB6C1)',
+            'linear-gradient(135deg, #FF1493, #FF69B4, #FF8C00)'
+        ];
+        
+        let currentGradient = 0;
+        let musicPlaying = false;
+        
+        // Memory data
+        const memories = [
+            { text: "First Date 💖", image: "/api/placeholder/150/200" },
+            { text: "Beach Day 🌅", image: "/api/placeholder/150/200" },
+            { text: "Sunset Kiss ✨", image: "/api/placeholder/150/200" },
+            { text: "Movie Night 🎬", image: "/api/placeholder/150/200" },
+            { text: "Coffee Date ☕", image: "/api/placeholder/150/200" },
+            { text: "Dancing 💃", image: "/api/placeholder/150/200" }
+        ];
+        
+        // Show love letter modal
+        function showMessage() {
+            const modal = document.getElementById('messageModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = 1;
+                modal.querySelector('.modal-content').style.transform = 'scale(1)';
+                createHeart();
+            }, 10);
+        }
+        
+        // Hide love letter modal
+        function hideMessage() {
+            const modal = document.getElementById('messageModal');
+            modal.style.opacity = 0;
+            modal.querySelector('.modal-content').style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+        
+        // Show memories section
+        function showMemories() {
+            document.querySelector('.glass-card').style.display = 'none';
+            document.getElementById('memories-card').style.display = 'block';
+        }
+        
+        // Hide memories section
+        function hideMemories() {
+            document.querySelector('.glass-card').style.display = 'block';
+            document.getElementById('memories-card').style.display = 'none';
+        }
+        
+        // Create floating heart animation
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 8000);
+        }
+        
+        // Initialize the app
+        window.addEventListener('DOMContentLoaded', () => {
+            // Create memory cards
+            const memoryContainer = document.getElementById('memory-container');
+            memories.forEach(memory => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.innerHTML = `
+                    <img src="${memory.image}" alt="Memory">
+                    <div class="memory-text">${memory.text}</div>
+                `;
+                memoryContainer.appendChild(card);
+            });
+            
+            // Change theme button
+            document.querySelector('.theme-btn').addEventListener('click', () => {
+                currentGradient = (currentGradient + 1) % gradients.length;
+                document.body.style.background = gradients[currentGradient];
+                createHeart();
+            });
+            
+            // Music button
+            document.getElementById('musicBtn').addEventListener('click', function() {
+                const music = document.getElementById('background-music');
+                if (musicPlaying) {
+                    music.pause();
+                    this.textContent = '🎵';
+                } else {
+                    music.play().catch(e => console.log('Audio playback was prevented:', e));
+                    this.textContent = '🔇';
+                }
+                musicPlaying = !musicPlaying;
+            });
+            
+            // Create random hearts
+            setInterval(createHeart, 2000);
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('messageModal');
+            if (e.target === modal) {
+                hideMessage();
+            }
+        });
+    </script>
+</body>
+</html>
